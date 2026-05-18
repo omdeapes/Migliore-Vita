@@ -20,3 +20,12 @@
 - `GET /products`      # List products
 - `POST /sales`        # Create sale
 - `POST /sync`         # Mobile sync
+
+## Database Changes
+
+### Manual Updates
+- **2026-05-18**: Added `photographer_id` column to the `invoices` table to resolve a backend error:
+  ```sql
+  ALTER TABLE invoices ADD COLUMN photographer_id INTEGER;
+  ```
+  This change was applied manually to the PostgreSQL database. The corresponding migration (`migrations/20260517234558-add-photographer-id-to-invoices.js`) was created but not executed due to authentication issues.
