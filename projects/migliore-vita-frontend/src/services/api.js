@@ -42,10 +42,10 @@ apiClient.interceptors.response.use(
 
 export const authApi = {
   login: (email, password) =>
-    apiClient.post('/admin/login', { email, password }),
+    apiClient.post('/auth/login', { email, password }),
 
   logout: () =>
-    apiClient.post('/admin/logout'),
+    apiClient.post('/auth/logout'),
 }
 
 // ── Trips ──────────────────────────────────────────────────────────────────
@@ -95,3 +95,19 @@ export const dashboardApi = {
 }
 
 export default apiClient
+
+// ── Photographers ─────────────────────────────────────────────────────────
+
+export const photographersApi = {
+  list: (params) =>
+    apiClient.get('/admin/photographers', { params }),
+
+  get: (id) =>
+    apiClient.get(`/admin/photographers/${id}`),
+
+  create: (data) =>
+    apiClient.post('/admin/photographers', data),
+
+  update: (id, data) =>
+    apiClient.patch(`/admin/photographers/${id}`, data),
+}

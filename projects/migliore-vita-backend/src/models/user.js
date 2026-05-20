@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 
 const User = sequelize.define('User', {
   id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
   },
   email: {
@@ -54,6 +54,12 @@ User.prototype.checkPassword = async function(plainPassword) {
 // Class method to find by email (for login)
 User.findByEmail = async function(email) {
   return User.findOne({ where: { email: email.toLowerCase(), isActive: true } });
+};
+
+User.associate = (models) => {
+  if (models.Trip) {
+    User.belongsToMany(models.Trip, { through: 'trip_photographers', as: 'trips', foreignKey: 'photographerId', otherKey: 'tripId' });
+  }
 };
 
 module.exports = User;

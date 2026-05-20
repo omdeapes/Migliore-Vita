@@ -14,6 +14,7 @@ const healthRoutes = require('./routes/health');
 const authRoutes = require('./routes/auth');
 const photographerRoutes = require('./routes/photographer');
 const adminRoutes = require('./routes/admin');
+const productsRoutes = require('./routes/products');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,8 +23,19 @@ const PORT = process.env.PORT || 3000;
 
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:5173'],
+  origin: process.env.CORS_ORIGINS?.split(',') || [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'http://localhost:5176',
+    'http://5.189.160.78:5173',
+    'http://5.189.160.78:5174',
+    'http://5.189.160.78:5175',
+    'http://5.189.160.78:5176',
+  ],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 // Rate limiting
@@ -52,7 +64,8 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/v1', healthRoutes);
 app.use('/v1/auth', authRoutes);
 app.use('/v1', photographerRoutes);    // /v1/trips, /v1/invoices, /v1/sync, /v1/media
-app.use('/v1/admin', adminRoutes);     // /v1/admin/*  (JWT + role required)
+app.use('/v1/admin', adminRoutes);
+app.use('/v1/products', productsRoutes);     // /v1/admin/*  (JWT + role required)
 
 // ── Error handler ─────────────────────────────────────────────────────────────
 

@@ -1,0 +1,31 @@
+                                           Table "public.invoices"
+      Column      |            Type             | Collation | Nullable |               Default                
+------------------+-----------------------------+-----------+----------+--------------------------------------
+ id               | integer                     |           | not null | nextval('invoices_id_seq'::regclass)
+ userId           | integer                     |           |          | 
+ trip_id          | integer                     |           |          | 
+ amount           | numeric(10,2)               |           |          | 
+ status           | character varying(50)       |           |          | 
+ dueDate          | date                        |           |          | 
+ createdAt        | timestamp with time zone    |           |          | CURRENT_TIMESTAMP
+ updatedAt        | timestamp with time zone    |           |          | CURRENT_TIMESTAMP
+ created_at       | timestamp with time zone    |           |          | CURRENT_TIMESTAMP
+ updated_at       | timestamp with time zone    |           |          | CURRENT_TIMESTAMP
+ photographer_id  | integer                     |           |          | 
+ guest_name       | character varying(255)      |           |          | 
+ guest_contact    | character varying(255)      |           |          | 
+ guest_hotel      | character varying(255)      |           |          | 
+ guest_room       | character varying(50)       |           |          | 
+ currency         | character varying(3)        |           |          | 'EGP'::character varying
+ created_at_local | timestamp without time zone |           |          | 
+ synced_at        | timestamp without time zone |           |          | 
+ media_count      | integer                     |           |          | 0
+ device_id        | character varying(255)      |           |          | 
+ serial_number    | character varying(100)      |           |          | 
+ serial_sequence  | integer                     |           |          | 
+Indexes:
+    "invoices_pkey" PRIMARY KEY, btree (id)
+Foreign-key constraints:
+    "invoices_trip_id_fkey" FOREIGN KEY (trip_id) REFERENCES trips(id)
+    "invoices_userId_fkey" FOREIGN KEY ("userId") REFERENCES users(id)
+

@@ -63,4 +63,9 @@ const Media = sequelize.define('Media', {
   ],
 });
 
+// Relationships
+Media.associate = (models) => {
+  Media.belongsTo(models.Invoice, { foreignKey: 'invoiceId', as: 'invoice' });
+};
+
 module.exports = Media;

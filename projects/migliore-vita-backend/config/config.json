@@ -1,22 +1,22 @@
 {
   "development": {
-    "username": "postgres",
-    "password": null,
+    "username": "migliore_vita",
+    "password": "secure_password_123",
     "database": "migliore_vita_development",
-    "host": "",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "migliore_vita",
-    "password": "secure…_123",
-    "database": "migliore_vita_test",
+    "password": "secure_password_123",
+    "database": "migliore_vita_development",
     "host": "localhost",
     "dialect": "postgres"
   },
   "production": {
     "username": "migliore_vita",
-    "password": "secure…_123",
-    "database": "migliore_vita_production",
+    "password": "secure_password_123",
+    "database": "migliore_vita_development",
     "host": "localhost",
     "dialect": "postgres"
   }

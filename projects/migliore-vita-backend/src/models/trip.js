@@ -18,6 +18,7 @@ const Trip = sequelize.define('Trip', {
   guideId: {
     type: DataTypes.UUID,
     allowNull: true,
+    field: 'guide_id', // Maps to snake_case column in the database
   },
   guideName: {
     type: DataTypes.STRING(255),
@@ -42,5 +43,15 @@ const Trip = sequelize.define('Trip', {
     { fields: ['status'] },
   ],
 });
+
+// Relationships
+Trip.associate = (models) => {
+  Trip.hasMany(models.Invoice, { foreignKey: 'tripId', as: 'invoices' });
+  Trip.hasMany(models.Expense, { foreignKey: 'tripId', as: 'expenses' });
+  if (models.Guide) {
+    Trip.belongsTo(models.Guide, { foreignKey: 'guideId', as: 'guide' });
+  }
+  Trip.belongsToMany(models.User, { through: 'trip_photographers', as: 'photographers', foreignKey: 'tripId', otherKey: 'photographerId' });
+};
 
 module.exports = Trip;

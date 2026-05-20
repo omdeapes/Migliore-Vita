@@ -35,11 +35,17 @@ function requireAuth(req, res, next) {
  */
 function requireRole(...roles) {
   return (req, res, next) => {
+    console.log('requireRole middleware triggered');
+    console.log('req.user:', req.user);
+    console.log('Allowed roles:', roles);
+
     if (!req.user) {
+      console.log('No req.user found');
       return res.status(401).json({ error: 'Authentication required' });
     }
 
     if (!roles.includes(req.user.role)) {
+      console.log(`User role ${req.user.role} not in allowed roles`);
       logger.warn(
         `Access denied: ${req.user.email} (${req.user.role}) tried to access ${req.method} ${req.path}`
       );
@@ -49,6 +55,7 @@ function requireRole(...roles) {
       });
     }
 
+    console.log('Access granted');
     next();
   };
 }

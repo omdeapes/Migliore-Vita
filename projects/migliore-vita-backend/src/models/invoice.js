@@ -14,17 +14,20 @@ const Invoice = sequelize.define('Invoice', {
   tripId: {
     type: DataTypes.UUID,
     allowNull: false,
+    field: 'trip_id', // Maps to snake_case column in the database
     references: { model: 'trips', key: 'id' },
   },
   photographerId: {
     type: DataTypes.UUID,
     allowNull: false,
+    field: 'photographer_id', // Maps to snake_case column in the database
     references: { model: 'photographers', key: 'id' },
   },
   serialNumber: {
     type: DataTypes.STRING(100),
     allowNull: false,
     unique: true,
+    field: 'serial_number', // Maps to the snake_case column in the database
     comment: 'Format: TRIP-{DATE}-PHOTO-{ID}-{SEQUENCE}',
   },
   serialSequence: {
@@ -87,6 +90,7 @@ const Invoice = sequelize.define('Invoice', {
   },
 }, {
   tableName: 'invoices',
+  underscored: true,
   indexes: [
     { fields: ['trip_id'] },
     { fields: ['photographer_id'] },
@@ -95,5 +99,13 @@ const Invoice = sequelize.define('Invoice', {
     { unique: true, fields: ['trip_id', 'photographer_id', 'serial_sequence'] },
   ],
 });
+
+// Relationships
+Invoice.associate = (models) => {
+  Invoice.belongsTo(models.Trip, { foreignKey: 'tripId', as: 'trip' });
+  Invoice.belongsTo(models.Photographer, { foreignKey: 'photographerId', as: 'photographer' });
+  Invoice.hasMany(models.InvoiceSplit, { foreignKey: 'invoiceId', as: 'splits' });
+  Invoice.hasMany(models.Media, { foreignKey: 'invoiceId', as: 'media' });
+};
 
 module.exports = Invoice;

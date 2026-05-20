@@ -23,7 +23,7 @@ export default function Login() {
       navigate('/dashboard', { replace: true })
     } catch (err) {
       setError(
-        err.response?.data?.message || 'Login failed. Please check your credentials.'
+        err.response?.data?.error || err.response?.data?.message || 'Login failed. Please check your credentials.'
       )
     } finally {
       setLoading(false)

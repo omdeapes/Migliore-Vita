@@ -1,6 +1,14 @@
 const { Sequelize } = require('sequelize');
 const logger = require('./logger');
 
+console.log('DB Config:', {
+  name: process.env.DB_NAME || 'migliore_vita',
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD ? '***' : 'empty',
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || '5432'
+});
+
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'migliore_vita',
   process.env.DB_USER || 'postgres',
@@ -29,9 +37,18 @@ async function connectDatabase() {
   logger.info('PostgreSQL connected successfully');
 
   if (process.env.NODE_ENV === 'development') {
-    // Sync in development only - NEVER in production
-    await sequelize.sync({ alter: false });
-    logger.info('Database synced (development)');
+    // Check if tables exist
+    const [results] = await sequelize.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name IN ('users', 'trips', 'invoices', 'media');"
+    );
+    
+    if (results.length === 0) {
+      // Sync in development only - NEVER in production
+      await sequelize.sync({ alter: false });
+      logger.info('Database synced (development)');
+    } else {
+      logger.info('Tables already exist, skipping sync');
+    }
   }
 }
 
