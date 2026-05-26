@@ -1,10 +1,9 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/v1'
+// Using Vite proxy: /v1 → localhost:3000/v1 in dev
+// In production, set VITE_API_BASE_URL to the full backend URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/v1'
 
-/**
- * Axios instance with auth interceptors
- */
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 15000,
@@ -26,7 +25,7 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 )
 
-// Response interceptor — handle 401 (token expired)
+// Response interceptor — handle 401
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -48,6 +47,13 @@ export const authApi = {
     apiClient.post('/auth/logout'),
 }
 
+// ── Dashboard ──────────────────────────────────────────────────────────────
+
+export const dashboardApi = {
+  getStats: () =>
+    apiClient.get('/admin/dashboard'),
+}
+
 // ── Trips ──────────────────────────────────────────────────────────────────
 
 export const tripsApi = {
@@ -57,11 +63,17 @@ export const tripsApi = {
   get: (id) =>
     apiClient.get(`/admin/trips/${id}`),
 
+  getSummary: (id) =>
+    apiClient.get(`/admin/trips/${id}/summary`),
+
   create: (data) =>
     apiClient.post('/admin/trips', data),
 
   update: (id, data) =>
     apiClient.patch(`/admin/trips/${id}`, data),
+
+  close: (id, dryRun = false) =>
+    apiClient.post(`/admin/trips/${id}/close?dry_run=${dryRun}`),
 }
 
 // ── Invoices ───────────────────────────────────────────────────────────────
@@ -73,7 +85,13 @@ export const invoicesApi = {
   get: (id) =>
     apiClient.get(`/admin/invoices/${id}`),
 
-  resendDelivery: (id, channel) =>
+  update: (id, data) =>
+    apiClient.patch(`/admin/invoices/${id}`, data),
+
+  recordPayment: (id, data) =>
+    apiClient.post(`/admin/invoices/${id}/payouts`, data),
+
+  deliver: (id, channel) =>
     apiClient.post(`/admin/invoices/${id}/deliver`, { channel }),
 }
 
@@ -83,18 +101,9 @@ export const mediaApi = {
   list: (params) =>
     apiClient.get('/admin/media', { params }),
 
-  resendLink: (id) =>
+  deliver: (id) =>
     apiClient.post(`/admin/media/${id}/deliver`),
 }
-
-// ── Dashboard ──────────────────────────────────────────────────────────────
-
-export const dashboardApi = {
-  getStats: () =>
-    apiClient.get('/admin/dashboard/stats'),
-}
-
-export default apiClient
 
 // ── Photographers ─────────────────────────────────────────────────────────
 
@@ -110,4 +119,29 @@ export const photographersApi = {
 
   update: (id, data) =>
     apiClient.patch(`/admin/photographers/${id}`, data),
+
+  delete: (id) =>
+    apiClient.delete(`/admin/photographers/${id}`),
 }
+
+// ── Payouts ───────────────────────────────────────────────────────────────
+
+export const payoutsApi = {
+  list: (params) =>
+    apiClient.get('/admin/payouts', { params }),
+
+  record: (invoiceId, data) =>
+    apiClient.post(`/admin/invoices/${invoiceId}/payouts`, data),
+}
+
+// ── Reports ───────────────────────────────────────────────────────────────
+
+export const reportsApi = {
+  revenue: (params) =>
+    apiClient.get('/admin/reports/revenue', { params }),
+
+  photographers: (params) =>
+    apiClient.get('/admin/reports/photographers', { params }),
+}
+
+export default apiClient

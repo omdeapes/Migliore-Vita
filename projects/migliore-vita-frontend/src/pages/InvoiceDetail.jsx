@@ -15,7 +15,7 @@ export default function InvoiceDetail() {
   })
 
   const resendMutation = useMutation({
-    mutationFn: (channel) => invoicesApi.resendDelivery(id, channel),
+    mutationFn: (channel) => invoicesApi.deliver(id, channel),
     onSuccess: (_, channel) => {
       addToast({ type: 'success', message: `Delivery resent via ${channel}` })
       queryClient.invalidateQueries(['invoice', id])

@@ -6,6 +6,9 @@ const navItems = [
   { path: '/trips', icon: '🦁', label: 'Trips', roles: ['admin'] },
   { path: '/invoices', icon: '🧾', label: 'Invoices', roles: ['admin', 'accountant', 'support'] },
   { path: '/media', icon: '📸', label: 'Media', roles: ['admin', 'support'] },
+  { path: '/photographers', icon: '🎞️', label: 'Photographers', roles: ['admin'] },
+  { path: '/payouts', icon: '💸', label: 'Payouts', roles: ['admin', 'accountant'] },
+  { path: '/reports', icon: '📈', label: 'Reports', roles: ['admin', 'accountant'] },
   { path: '/settings', icon: '⚙️', label: 'Settings', roles: ['admin'] },
 ]
 

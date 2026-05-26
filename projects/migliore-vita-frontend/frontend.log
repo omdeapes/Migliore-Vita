@@ -1,0 +1,19 @@
+
+> migliore-vita-frontend@0.0.0 dev
+> vite
+
+(node:551392) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+  VITE v5.4.21  ready in 747 ms
+
+  ➜  Local:   http://localhost:5000/
+  ➜  Network: http://5.189.160.78:5000/
+The request url "/home/devuser/workspace/MiglioreVita/projects/migliore-vita-frontend/.env" is outside of Vite serving allow list.
+
+- /home/devuser/workspace/MiglioreVita/projects/migliore-vita-frontend
+
+Refer to docs https://vite.dev/config/server-options.html#server-fs-allow for configurations and more details.
+
+Files in the public directory are served at the root path.
+Instead of /public/, use /.
